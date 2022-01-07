@@ -70,7 +70,7 @@ class LiveCrudView extends GeneratorCommand
         $label = ucfirst(str_replace('-', ' ', Str::slug($name)));
         $message = '{{ $message }}';
         if (config('livecrud.template') == 'tailwind') {
-            return "<div><label class='block'><span class='text-gray-700 @error('{$name}') text-red-500  @enderror'>{$label}</span><input type='{$type}' class='mt-1 block w-full rounded-md border-gray-300 shadow-sm @error('{$name}')  border-red-500 @enderror focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50' wire:model='{$name}'>@error('{$name}')<span class='text-red-500 text-sm'>{$message}</span>@enderror</label></div>";
+            return "<div><label class='block'><span class='text-gray-700 @error('{$name}') text-red-500  @enderror'>{$label}</span><input type='{$type}' class='mt-1 mb-1 block w-full rounded-md border-gray-300 shadow-sm @error('{$name}')  border-red-500 @enderror focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50' wire:model='{$name}'>@error('{$name}')<span class='text-red-500 text-sm'>{$message}</span>@enderror</label></div>";
         }
         if (config('livecrud.template') == 'bootstrap') {
             return "<div class='form-group'><label for='{$name}'>{$label}</label><input type='{$type}' class='form-control @error('{$name}')  is-invalid @enderror' wire:model='{$name}'>@error('{$name}')<div class='invalid-feedback'>{$message}</div>@enderror</div>";
@@ -111,11 +111,20 @@ class LiveCrudView extends GeneratorCommand
                 }
                 $c++;
             }
-            $str .= '<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                <a href="#" class="text-indigo-600 hover:text-indigo-900" wire:click="edit({{ $row->id }})">{{ __("Edit") }}</a>
-                                <a href="#" class="text-indigo-600 hover:text-indigo-900" wire:click="confirmDelete({{ $row->id }})">{{ __("Delete") }}</a>
-                            </td></tr>';
-            $str .= '@empty  <tr><td>No Records Found</td></tr>   @endforelse' . PHP_EOL;
+            $str .= '<td class="px-2 py-2 whitespace-nowrap text-right text-sm font-medium flex flex-row" style="width:1%">
+                                <a href="#" class="p-1 bg-gray-50 border rounded hover:bg-gray-200 text-gray-700 mr-2" wire:click="edit({{ $row->id }})">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                    </svg>
+                                </a>
+                                <a href="#" class="p-1 bg-gray-50 border rounded hover:bg-gray-200 text-red-500" wire:click="confirmDelete({{ $row->id }})">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                      <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                    </svg>
+                                </a>
+                            </td>';
+            $str .= '</tr>';
+            $str .= '@empty  <tr><td class="p-2 text-sm" colspan="20">'.__('No records found').'</td></tr>   @endforelse' . PHP_EOL;
 
         }
         if (config('livecrud.template') == 'bootstrap') {
@@ -151,7 +160,7 @@ class LiveCrudView extends GeneratorCommand
         if (config('livecrud.template') == 'bootstrap') {
             return ' <td>{{ $row->' . $name . '}}</td>' . PHP_EOL;
         }
-        return ' <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $row->' . $name . '}}</td>' . PHP_EOL;
+        return ' <td class="px-2 py-2 whitespace-nowrap text-sm text-gray-500">{{ $row->' . $name . '}}</td>' . PHP_EOL;
     }
 
     public function getHeadings(): string
