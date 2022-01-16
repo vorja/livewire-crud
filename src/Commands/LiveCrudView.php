@@ -88,6 +88,12 @@ class LiveCrudView extends GeneratorCommand
         if (strtolower($name) == 'password') {
             return 'password';
         }
+        if (strtolower($name) == 'image') {
+            return 'file';
+        }
+        if (strtolower($name) == 'file') {
+            return 'file';
+        }
         return 'text';
     }
 
@@ -101,16 +107,7 @@ class LiveCrudView extends GeneratorCommand
         $str .= '@forelse($rows as $row)' . PHP_EOL;
         $str .= '<tr>';
         if (config('livecrud.template') == 'tailwind') {
-            foreach ($columns as $column) {
-                if ($column != 'created_at' || $column != 'updated_at') {
-                    if ($c == 1) {
-                        $str .= $this->getDynamicData(str_replace('-', ' ', Str::slug($column))) . PHP_EOL;
-                    } else {
-                        $str .= $this->getDynamicData(str_replace('-', ' ', Str::slug($column))) . PHP_EOL;
-                    }
-                }
-                $c++;
-            }
+
             $str .= '<td class="px-2 py-2 whitespace-nowrap text-right text-sm font-medium flex flex-row" style="width:1%">
                                 <a href="#" class="p-1 bg-gray-50 border rounded hover:bg-gray-200 text-gray-700 mr-2" wire:click="edit({{ $row->id }})">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -123,6 +120,18 @@ class LiveCrudView extends GeneratorCommand
                                     </svg>
                                 </a>
                             </td>';
+
+            foreach ($columns as $column) {
+                if ($column != 'created_at' || $column != 'updated_at') {
+                    if ($c == 1) {
+                        $str .= $this->getDynamicData(str_replace('-', '_', Str::slug($column))) . PHP_EOL;
+                    } else {
+                        $str .= $this->getDynamicData(str_replace('-', '_', Str::slug($column))) . PHP_EOL;
+                    }
+                }
+                $c++;
+            }
+
             $str .= '</tr>';
             $str .= '@empty  <tr><td class="p-2 text-sm" colspan="20">'.__('No records found').'</td></tr>   @endforelse' . PHP_EOL;
 

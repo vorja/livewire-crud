@@ -17,7 +17,13 @@
             <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                     <div class="overflow-hidden sm:rounded-lg p-2 flex flex-col sm:flex-row justify-between">
-                        <div class="w-full mt-2">
+                        <div class="w-full mt-2 flex flex-row">
+                            <select wire:model="language" class="mr-3 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm block mt-1 w-full sm:w-1/2" id="language" type="text" name="language" autocomplete="off"
+                                                            required="required" autofocus="autofocus" placeholder="{{ __('Language') }}">
+                                 @foreach(config('app.locales') as $locale)
+                                 <option value="{{ $locale }}">{{ __('locale.'.$locale)}}</option>
+                                 @endforeach
+                             </select>
                             <input wire:model="search" class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm block mt-1 w-full sm:w-1/2" id="search" type="text" name="search" autocomplete="off" wire:model="search" required="required" autofocus="autofocus" placeholder="{{ __('Search') }}">
                         </div>
                         <div class="w-full text-right sm:text-right mt-2">
@@ -38,10 +44,10 @@
                     <table class="w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                         <tr>
-
-                            {{ headings }}
                             <th scope="col" class="relative px-6 py-3" style="width:1%">
                             </th>
+                            {{ headings }}
+
                         </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">

@@ -2,6 +2,7 @@
 
 namespace {{ namespace }};
 
+use Illuminate\Support\Facades\App;
 {{ useclasses }}
 
 class {{ name }} extends Component
@@ -20,10 +21,15 @@ class {{ name }} extends Component
 
     public $search;
 
+    public $language = null;
+
     public $showConfirmDeletePopup = false;
 
     {{ rules }}
 
+    public function mount(){
+        $this->language = App::getLocale();
+    }
 
     public function updated($propertyName)
     {
@@ -37,6 +43,7 @@ class {{ name }} extends Component
 
     public function render()
     {
+        App::setLocale($this->language);
         {{ query }}
         return view('livewire.{{ blade }}', [
             'rows'=> $model
@@ -56,7 +63,7 @@ class {{ name }} extends Component
     {
         $this->mode = 'update';
         $this->primaryId = $primaryId;
-        $model = Model::find($primaryId);
+        $model = Model::find($primaryId)->setLocale($this->language);
 
         {{ setedibleval }}
 
@@ -72,7 +79,7 @@ class {{ name }} extends Component
     public function store()
     {
           $this->validate();
-
+          App::setLocale($this->language);
           $model = new Model();
 
           {{ codeTosave }}
@@ -91,7 +98,7 @@ class {{ name }} extends Component
     public function update()
     {
           $this->validate();
-
+          App::setLocale($this->language);
           $model = Model::find($this->primaryId);
 
           {{ codeTosave }}
